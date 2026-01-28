@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo Ingreso - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-procedures me-2"></i>
+        Registrar Ingreso
+    </h2>
+</div>
+
+<div class="card shadow-sm p-4">
+
+    <form method="POST">
+
+        <div class="row g-3">
+
+            <!-- PACIENTE -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Paciente</label>
+                <select name="pacientes_id" class="form-select" required>
+                    <option value="">Seleccione</option>
+                    {% for p in pacientes %}
+                        <option value="{{ p.id }}">{{ p.nombre }} {{ p.apellido }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- MÉDICO -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Médico Responsable</label>
+                <select name="medico_id" class="form-select" required>
+                    <option value="">Seleccione</option>
+                    {% for m in medicos %}
+                        <option value="{{ m.id }}">{{ m.nombre }} {{ m.apellido }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- HABITACIÓN -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Habitación</label>
+                <select name="habitacion_id" id="habitacion-select" class="form-select" required>
+                    <option value="">Seleccione</option>
+                    {% for h in habitaciones %}
+                        <option value="{{ h.id }}">
+                            Habitación {{ h.numero }} (Piso {{ h.piso }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- CAMAS DINÁMICAS -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Cama Disponible</label>
+                <select name="cama_id" id="cama-select" class="form-select" required>
+                    <option value="">Seleccione una habitación primero</option>
+                </select>
+            </div>
+
+            <!-- MOTIVO -->
+            <div class="col-md-12">
+                <label class="form-label fw-semibold">Motivo del Ingreso</label>
+                <input type="text" name="motivo" class="form-control" required>
+            </div>
+
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="las la-save me-1"></i> Registrar
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+<!-- SCRIPT PARA CARGAR CAMAS LIBRES -->
+<script>
+document.getElementById('habitacion-select').addEventListener('change', function() {
+    const habitacionId = this.value;
+
+    fetch(`/ingresos/camas/${habitacionId}`)
+        .then(response => response.json())
+        .then(data => {
+            const camaSelect = document.getElementById('cama-select');
+            camaSelect.innerHTML = "";
+
+            if (data.camas.length === 0) {
+                camaSelect.innerHTML = "<option>No hay camas libres</option>";
+                return;
+            }
+
+            camaSelect.innerHTML = "<option value=''>Seleccione</option>";
+
+            data.camas.forEach(c => {
+                camaSelect.innerHTML += `<option value="${c.id}">${c.codigo}</option>`;
+            });
+        });
+});
+</script>
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+</div>
+{% endblock %}

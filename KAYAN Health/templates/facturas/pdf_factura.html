@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Factura #{{ factura.id }}</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .header img {
+            width: 120px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #0d6efd;
+        }
+
+        .item {
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #0d6efd;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+
+        th {
+            background: #f5f5f5;
+        }
+
+        .total {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <img src="https://i.imgur.com/7yUVE6v.png" alt="Logo KAYAN Health">
+    <h1>KAYAN Health</h1>
+</div>
+
+<h2>Factura #{{ factura.id }}</h2>
+
+<div class="item">
+    <span class="label">Paciente:</span>
+    {{ factura.paciente.nombre }} {{ factura.paciente.apellido }}
+</div>
+
+<div class="item">
+    <span class="label">Método de Pago:</span>
+    {{ factura.metodo_pago }}
+</div>
+
+<div class="item">
+    <span class="label">Fecha:</span>
+    {{ factura.fecha.strftime('%Y-%m-%d') }}
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Servicio</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for d in factura.detalles %}
+        <tr>
+            <td>{{ d.servicio.nombre if d.servicio else '-' }}</td>
+            <td>{{ d.descripcion }}</td>
+            <td>${{ "%.2f"|format(d.precio) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="total">
+    Total: ${{ "%.2f"|format(factura.total) }}
+</div>
+
+<div class="footer">
+    Documento generado automáticamente por KAYAN Health · {{ fecha_actual.strftime('%d/%m/%Y %H:%M') }}
+</div>
+
+</body>
+</html>

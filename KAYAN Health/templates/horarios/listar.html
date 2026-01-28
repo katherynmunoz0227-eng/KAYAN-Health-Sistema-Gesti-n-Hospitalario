@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Horarios Médicos - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-clock me-2"></i>
+        Horarios Médicos
+    </h2>
+
+    <a href="{{ url_for('horario_bp.nuevo_horario') }}" class="btn btn-primary">
+        <i class="las la-plus-circle me-1"></i> Nuevo Horario
+    </a>
+</div>
+
+<div class="card shadow-sm p-3">
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Médico</th>
+                    <th>Día</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for h in horarios %}
+                <tr>
+                    <td>{{ h.medico.nombre }} {{ h.medico.apellido }}</td>
+                    <td>{{ h.dia_semana }}</td>
+                    <td>{{ h.hora_inicio }}</td>
+                    <td>{{ h.hora_fin }}</td>
+
+                    <td class="text-center">
+
+                        <!-- Editar -->
+                        <a href="{{ url_for('horario_bp.editar', id=h.id) }}"
+                           class="btn btn-sm btn-outline-primary me-1">
+                            <i class="las la-edit"></i>
+                        </a>
+
+                        <!-- Eliminar -->
+                        <form action="{{ url_for('horario_bp.eliminar', id=h.id) }}"
+                              method="POST" class="d-inline">
+                            <button class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('¿Eliminar horario?')">
+                                <i class="las la-trash"></i>
+                            </button>
+                        </form>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+<div class="d-flex justify-content-end mt-3">
+         {% include "components/botones_nav.html" %} 
+</div>
+
+{% endblock %}

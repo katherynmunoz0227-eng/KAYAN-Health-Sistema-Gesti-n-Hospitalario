@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle del Paciente - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-id-card me-2"></i> Detalle del Paciente
+    </h2>
+</div>
+
+<!-- ============================
+     INFORMACIÓN GENERAL
+============================= -->
+<div class="card shadow-sm mb-4 p-4">
+    <h4 class="fw-bold mb-3">
+        <i class="las la-user me-2"></i> Información General
+    </h4>
+
+    <div class="row g-3">
+
+        <div class="col-md-6">
+            <label class="fw-semibold">Nombre:</label>
+            <div>{{ paciente.nombre }}</div>
+        </div>
+
+        <div class="col-md-6">
+            <label class="fw-semibold">Apellido:</label>
+            <div>{{ paciente.apellido }}</div>
+        </div>
+
+        <div class="col-md-6">
+            <label class="fw-semibold">Fecha de nacimiento:</label>
+            <div>{{ paciente.fecha_nacimiento }}</div>
+        </div>
+
+        <div class="col-md-6">
+            <label class="fw-semibold">Teléfono:</label>
+            <div>{{ paciente.telefono }}</div>
+        </div>
+
+        <div class="col-md-6">
+            <label class="fw-semibold">Email:</label>
+            <div>{{ paciente.email }}</div>
+        </div>
+
+        <div class="col-md-12">
+            <label class="fw-semibold">Dirección:</label>
+            <div>{{ paciente.direccion }}</div>
+        </div>
+
+    </div>
+
+    <a href="{{ url_for('historial_bp.ver_historial', paciente_id=paciente.id) }}"
+       class="btn btn-danger mt-4">
+        <i class="las la-notes-medical me-1"></i> Ver Historial Médico
+    </a>
+</div>
+
+<!-- ============================
+     INGRESO ACTUAL
+============================= -->
+<div class="card shadow-sm mb-4 p-4">
+    <h4 class="fw-bold mb-3">
+        <i class="las la-procedures me-2"></i> Ingreso Actual
+    </h4>
+
+    {% if ingreso_actual %}
+        <div class="border rounded p-3 bg-light">
+
+            <p><strong>Habitación:</strong> {{ ingreso_actual.cama.habitacion.numero }}</p>
+            <p><strong>Cama:</strong> {{ ingreso_actual.cama.codigo }}</p>
+            <p><strong>Estado:</strong> {{ ingreso_actual.estado }}</p>
+            <p><strong>Motivo:</strong> {{ ingreso_actual.motivo }}</p>
+
+        </div>
+    {% else %}
+        <p class="text-muted">El paciente no está internado actualmente.</p>
+    {% endif %}
+</div>
+
+<!-- ============================
+     HISTORIAL DE INGRESOS
+============================= -->
+<div class="card shadow-sm mb-4 p-4">
+    <h4 class="fw-bold mb-3">
+        <i class="las la-history me-2"></i> Historial de Ingresos
+    </h4>
+
+    {% if ingresos %}
+        <div class="row g-3">
+            {% for ing in ingresos %}
+            <div class="col-md-4">
+                <div class="border rounded p-3 bg-light">
+                    <p><strong>Fecha:</strong> {{ ing.fecha_ingreso }}</p>
+                    <p><strong>Estado:</strong> {{ ing.estado }}</p>
+                    <p><strong>Habitación:</strong> {{ ing.cama.habitacion.numero }}</p>
+                    <p><strong>Cama:</strong> {{ ing.cama.codigo }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">No hay ingresos registrados.</p>
+    {% endif %}
+</div>
+
+<!-- ============================
+     CITAS
+============================= -->
+<div class="card shadow-sm mb-4 p-4">
+    <h4 class="fw-bold mb-3">
+        <i class="las la-calendar-check me-2"></i> Citas
+    </h4>
+
+    {% if citas %}
+        <div class="row g-3">
+            {% for c in citas %}
+            <div class="col-md-4">
+                <div class="border rounded p-3 bg-light">
+                    <p><strong>Fecha:</strong> {{ c.fecha }}</p>
+                    <p><strong>Estado:</strong> {{ c.estado }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">No hay citas registradas.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

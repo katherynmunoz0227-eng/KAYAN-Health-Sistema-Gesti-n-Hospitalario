@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar Horario - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-clock me-2"></i>
+        Registrar Horario
+    </h2>
+</div>
+
+<div class="card shadow-sm p-4">
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="row g-3">
+
+            <!-- Médico -->
+            <div class="col-md-12">
+                {{ form.medicos_id.label(class="form-label fw-semibold") }}
+                {{ form.medicos_id(class="form-select") }}
+            </div>
+
+            <!-- Día de la semana -->
+            <div class="col-md-4">
+                {{ form.dia_semana.label(class="form-label fw-semibold") }}
+                {{ form.dia_semana(class="form-select") }}
+            </div>
+
+            <!-- Hora inicio -->
+            <div class="col-md-4">
+                {{ form.hora_inicio.label(class="form-label fw-semibold") }}
+                {{ form.hora_inicio(class="form-control") }}
+            </div>
+
+            <!-- Hora fin -->
+            <div class="col-md-4">
+                {{ form.hora_fin.label(class="form-label fw-semibold") }}
+                {{ form.hora_fin(class="form-control") }}
+            </div>
+
+        </div>
+
+        <div class="mt-4">
+            <button class="btn btn-primary px-4">
+                <i class="las la-save me-1"></i> {{ form.submit.label.text }}
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+</div>
+{% endblock %}

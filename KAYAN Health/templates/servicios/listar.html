@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Servicios - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-briefcase-medical me-2"></i>
+        Servicios
+    </h2>
+
+    <a href="{{ url_for('servicios_bp.crear') }}" class="btn btn-primary">
+        <i class="las la-plus me-1"></i> Nuevo Servicio
+    </a>
+</div>
+
+<div class="card shadow-sm p-3">
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 35%;">Servicio</th>
+                    <th style="width: 35%;">Especialidad</th>
+                    <th style="width: 20%;">Precio</th>
+                    <th class="text-center" style="width: 10%;">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for s in servicios %}
+                <tr>
+                    <td>{{ s.id }}</td>
+                    <td>{{ s.nombre }}</td>
+                    <td>{{ s.especialidad.nombre_especialidad }}</td>
+                    <td>${{ "%.2f"|format(s.precio) }}</td>
+
+                    <td class="text-center">
+                        <form action="{{ url_for('servicios_bp.eliminar', id=s.id) }}"
+                              method="POST" class="d-inline">
+                            <button class="btn btn-sm btn-danger"
+                                    onclick="return confirm('¿Eliminar servicio?')">
+                                <i class="las la-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %}
+</div>
+
+{% endblock %}

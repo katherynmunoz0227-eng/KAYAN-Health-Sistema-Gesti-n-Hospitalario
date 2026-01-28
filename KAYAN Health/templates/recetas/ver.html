@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow border-0">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">🩺 Receta Médica #{{ receta.id }}</h4>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>📅 Fecha:</strong> {{ receta.fecha.strftime('%d/%m/%Y %H:%M') }}
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <strong>👨‍⚕️ Médico:</strong> {{ receta.medico.nombre }} {{ receta.medico.apellido }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <strong>👤 Paciente:</strong> {{ receta.paciente.nombre }} {{ receta.paciente.apellido }}
+            </div>
+
+            <hr>
+
+            <div class="mb-4">
+                <h5 class="text-primary">📝 Diagnóstico</h5>
+                <div class="border rounded p-3 bg-light">
+                    {{ receta.diagnostico or 'No registrado' }}
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h5 class="text-primary">💊 Indicaciones Médicas</h5>
+                <div class="border rounded p-3 bg-light" style="white-space: pre-line;">
+                    {{ receta.indicaciones_generales or 'No hay indicaciones registradas.' }}
+                </div>
+            </div>
+
+            <div class="text-end">
+                <a href="{{ url_for('recetas_bp.listar') }}" class="btn btn-outline-secondary">← Volver</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

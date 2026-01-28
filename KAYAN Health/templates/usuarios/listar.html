@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Usuarios - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-users me-2"></i>
+        Usuarios
+    </h2>
+
+    {% if current_user.role.nombre == 'Admin' %}
+    <a href="{{ url_for('usuarios_bp.crear') }}" class="btn btn-primary">
+        <i class="las la-user-plus me-1"></i> Crear Usuario
+    </a>
+    {% endif %}
+</div>
+
+<!-- Filtros -->
+<div class="d-flex gap-2 mb-3">
+
+    <a href="{{ url_for('usuarios_bp.listar_usuarios') }}" class="btn btn-outline-primary">
+        <i class="las la-list me-1"></i> Todos
+    </a>
+
+    <a href="{{ url_for('usuarios_bp.listar_admin') }}" class="btn btn-outline-primary">
+        <i class="las la-user-shield me-1"></i> Admin
+    </a>
+
+    <a href="{{ url_for('usuarios_bp.listar_medicos') }}" class="btn btn-outline-primary">
+        <i class="las la-user-md me-1"></i> Médicos
+    </a>
+
+    <a href="{{ url_for('usuarios_bp.listar_recepcion') }}" class="btn btn-outline-primary">
+        <i class="las la-user-injured me-1"></i> Recepción
+    </a>
+
+</div>
+
+<div class="card shadow-sm p-3">
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Rol</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for u in usuarios %}
+                <tr>
+
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.username }}</td>
+                    <td>{{ u.nombre }}</td>
+                    <td>{{ u.apellido }}</td>
+
+                    <!-- Rol con badges Bootstrap -->
+                    <td>
+                        {% if u.role.nombre == 'Admin' %}
+                            <span class="badge bg-danger">Admin</span>
+                        {% elif u.role.nombre == 'Medico' %}
+                            <span class="badge bg-success">Médico</span>
+                        {% elif u.role.nombre == 'Recepcion' %}
+                            <span class="badge bg-warning text-dark">Recepción</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ u.role.nombre }}</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Acciones -->
+                    <td class="text-center">
+
+                        {% if current_user.role.nombre == 'Admin' %}
+                        <a href="{{ url_for('usuarios_bp.editar', id=u.id) }}"
+                           class="btn btn-sm btn-outline-primary me-1">
+                            <i class="las la-edit"></i>
+                        </a>
+
+                        <form action="{{ url_for('usuarios_bp.eliminar', id=u.id) }}"
+                              method="POST" class="d-inline">
+                            <button class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('¿Eliminar usuario?')">
+                                <i class="las la-trash"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Listado de Citas{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-calendar-alt me-2"></i> Citas Registradas
+    </h2>
+
+    <a href="{{ url_for('citas_bp.nueva_cita', paciente_id=1) }}" class="btn btn-primary">
+        <i class="las la-plus me-1"></i> Nueva Cita
+    </a>
+</div>
+
+<div class="card shadow-sm p-3">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Paciente</th>
+                <th>Médico</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Estado</th>
+                <th class="text-end">Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for cita in citas %}
+            <tr>
+                <td>{{ cita.paciente.nombre }} {{ cita.paciente.apellido }}</td>
+                <td>{{ cita.medico.nombre }} {{ cita.medico.apellido }}</td>
+                <td>{{ cita.fecha.strftime('%d/%m/%Y') }}</td>
+                <td>{{ cita.hora.strftime('%H:%M') }}</td>
+                <td>
+                    <span class="badge bg-info text-dark">{{ cita.estado }}</span>
+                </td>
+
+                <td class="text-end">
+                    <a href="{{ url_for('citas_bp.detalle_cita', id=cita.id) }}" class="btn btn-sm btn-secondary">
+                        <i class="las la-eye"></i>
+                    </a>
+
+                    <a href="{{ url_for('citas_bp.editar_cita', id=cita.id) }}" class="btn btn-sm btn-warning">
+                        <i class="las la-edit"></i>
+                    </a>
+
+                    <form action="{{ url_for('citas_bp.editar_cita', id=cita.id) }}"
+                          method="POST" class="d-inline">
+                        <button class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar cita?')">
+                            <i class="las la-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+</div>
+{% endblock %}

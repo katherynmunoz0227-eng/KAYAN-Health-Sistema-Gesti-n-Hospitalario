@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle del Horario - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<h1 class="titulo-modulo"><i class="las la-clock"></i> Detalle del Horario</h1>
+
+<div class="card-kayan">
+
+    <div class="detalle-grid">
+
+        <div class="detalle-item">
+            <span class="detalle-label">Médico:</span>
+            <span class="detalle-valor">{{ horario.medico.nombre }} {{ horario.medico.apellido }}</span>
+        </div>
+
+        <div class="detalle-item">
+            <span class="detalle-label">Día:</span>
+            <span class="detalle-valor">{{ horario.dia_semana }}</span>
+        </div>
+
+        <div class="detalle-item">
+            <span class="detalle-label">Hora inicio:</span>
+            <span class="detalle-valor">{{ horario.hora_inicio }}</span>
+        </div>
+
+        <div class="detalle-item">
+            <span class="detalle-label">Hora fin:</span>
+            <span class="detalle-valor">{{ horario.hora_fin }}</span>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

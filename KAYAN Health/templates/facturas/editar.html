@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Factura - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-edit me-2"></i>
+        Editar Factura #{{ factura.id }}
+    </h2>
+
+    <a href="{{ url_for('facturas_bp.listar') }}" class="btn btn-secondary">
+        <i class="las la-arrow-left me-1"></i> Volver
+    </a>
+</div>
+
+<div class="card shadow-sm p-4">
+
+    <form method="POST">
+
+        <!-- Paciente -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Paciente</label>
+            <select name="pacientes_id" class="form-select" required>
+                {% for p in pacientes %}
+                <option value="{{ p.id }}"
+                    {% if p.id == factura.pacientes_id %}selected{% endif %}>
+                    {{ p.nombre }} {{ p.apellido }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Método de pago -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Método de Pago</label>
+            <select name="metodo_pago" class="form-select" required>
+                <option value="Efectivo" {% if factura.metodo_pago == 'Efectivo' %}selected{% endif %}>Efectivo</option>
+                <option value="Tarjeta" {% if factura.metodo_pago == 'Tarjeta' %}selected{% endif %}>Tarjeta</option>
+                <option value="Transferencia" {% if factura.metodo_pago == 'Transferencia' %}selected{% endif %}>Transferencia</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- DETALLES DE FACTURA -->
+        <h4 class="fw-bold mb-3">Detalles</h4>
+
+        <table class="table table-bordered align-middle" id="tabla-detalles">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 30%;">Servicio</th>
+                    <th style="width: 40%;">Descripción</th>
+                    <th style="width: 20%;">Precio</th>
+                    <th style="width: 10%;">Acción</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for d in factura.detalles %}
+                <tr>
+                    <td>
+                        <select name="servicio_id" class="form-select">
+                            <option value="">-- Seleccionar --</option>
+                            {% for s in servicios %}
+                            <option value="{{ s.id }}"
+                                {% if d.servicio_id == s.id %}selected{% endif %}>
+                                {{ s.nombre }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+
+                    <td>
+                        <input type="text" name="descripcion" class="form-control"
+                               value="{{ d.descripcion }}" required>
+                    </td>
+
+                    <td>
+                        <input type="number" name="precio" class="form-control"
+                               value="{{ d.precio }}" step="0.01" required>
+                    </td>
+
+                    <td class="text-center">
+                        <button type="button" class="btn btn-danger btn-sm eliminar-fila">
+                            <i class="las la-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="button" id="agregar-fila" class="btn btn-outline-primary mb-3">
+            <i class="las la-plus"></i> Agregar línea
+        </button>
+
+        <hr>
+
+        <button type="submit" class="btn btn-success">
+            <i class="las la-save me-1"></i> Guardar Cambios
+        </button>
+
+    </form>
+
+</div>
+
+<!-- SCRIPT PARA AGREGAR Y ELIMINAR FILAS -->
+<script>
+document.getElementById("agregar-fila").addEventListener("click", function () {
+    const tabla = document.querySelector("#tabla-detalles tbody");
+    const fila = document.createElement("tr");
+
+    fila.innerHTML = `
+        <td>
+            <select name="servicio_id" class="form-select">
+                <option value="">-- Seleccionar --</option>
+                {% for s in servicios %}
+                <option value="{{ s.id }}">{{ s.nombre }}</option>
+                {% endfor %}
+            </select>
+        </td>
+
+        <td>
+            <input type="text" name="descripcion" class="form-control" required>
+        </td>
+
+        <td>
+            <input type="number" name="precio" class="form-control" step="0.01" required>
+        </td>
+
+        <td class="text-center">
+            <button type="button" class="btn btn-danger btn-sm eliminar-fila">
+                <i class="las la-trash"></i>
+            </button>
+        </td>
+    `;
+
+    tabla.appendChild(fila);
+});
+
+document.addEventListener("click", function (e) {
+    if (e.target.closest(".eliminar-fila")) {
+        e.target.closest("tr").remove();
+    }
+});
+</script>
+
+{% endblock %}

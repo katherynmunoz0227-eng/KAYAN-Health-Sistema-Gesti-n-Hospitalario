@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de Cita</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .header img {
+            width: 120px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #0d6efd;
+        }
+
+        .item {
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #0d6efd;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <img src="https://i.imgur.com/7yUVE6v.png" alt="Logo KAYAN Health">
+    <h1>KAYAN Health</h1>
+</div>
+
+<h2>Detalle de la Cita</h2>
+
+<div class="item">
+    <span class="label">Paciente:</span>
+    {{ cita.paciente.nombre }} {{ cita.paciente.apellido }}
+</div>
+
+<div class="item">
+    <span class="label">Médico:</span>
+    {{ cita.medico.nombre }} {{ cita.medico.apellido }}
+</div>
+
+<div class="item">
+    <span class="label">Fecha:</span>
+    {{ cita.fecha }}
+</div>
+
+<div class="item">
+    <span class="label">Hora:</span>
+    {{ cita.hora }}
+</div>
+
+<div class="item">
+    <span class="label">Motivo:</span>
+    {{ cita.motivo }}
+</div>
+
+<div class="item">
+    <span class="label">Estado:</span>
+    {{ cita.estado }}
+</div>
+
+<div class="footer">
+    Documento generado automáticamente por KAYAN Health · {{ fecha_actual.strftime('%d/%m/%Y %H:%M') }}
+
+</div>
+
+</body>
+</html>

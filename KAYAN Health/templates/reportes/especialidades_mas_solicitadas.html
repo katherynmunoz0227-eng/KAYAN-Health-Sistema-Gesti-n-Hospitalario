@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Reporte: Especialidades más solicitadas</h2>
+
+    {% if resultados %}
+
+        <!-- TABLA -->
+        <table class="table table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th>Especialidad</th>
+                    <th>Total de Citas</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for esp, total in resultados %}
+                <tr>
+                    <td>{{ esp }}</td>
+                    <td>{{ total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- GRÁFICO -->
+        <div class="mt-5">
+            <h4>Gráfico estadístico</h4>
+            <canvas id="graficoEspecialidades"></canvas>
+        </div>
+
+        <!-- CHART JS -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <script>
+            const labels = {{ resultados | map(attribute=0) | list | tojson }};
+            const data = {{ resultados | map(attribute=1) | list | tojson }};
+
+            new Chart(document.getElementById('graficoEspecialidades'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Citas por especialidad',
+                        data: data,
+                        backgroundColor: '#4e73df',
+                        borderColor: '#2e59d9',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+
+    {% else %}
+        <p>No hay datos suficientes para generar este reporte.</p>
+    {% endif %}
+</div>
+
+<div class="d-flex justify-content-end mt-3">
+ {% include "components/botones_nav.html" %} 
+</div>
+{% endblock %}

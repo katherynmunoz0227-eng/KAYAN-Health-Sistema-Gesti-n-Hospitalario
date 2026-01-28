@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="fw-bold mb-4">
+        <i class="las la-user-md me-2"></i> Reporte: Pacientes por Médico
+    </h2>
+
+    <!-- FORMULARIO -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="POST" class="row g-3">
+                <div class="col-md-6">
+                    <label for="medico_id" class="form-label fw-semibold">Seleccione un médico:</label>
+                    <select name="medico_id" class="form-control" required>
+                        <option value="">-- Seleccione --</option>
+                        {% for m in medicos %}
+                            <option value="{{ m.id }}">{{ m.nombre }} {{ m.apellido }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="las la-search me-1"></i> Buscar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if medico %}
+        <h4 class="mb-3">
+            Pacientes atendidos por <strong>{{ medico.nombre }} {{ medico.apellido }}</strong>
+        </h4>
+
+        <!-- GRÁFICO -->
+        {% if datos_grafico %}
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="card-title text-info">
+                    <i class="las la-chart-bar me-2"></i> Cantidad de citas por paciente
+                </h5>
+
+                <canvas id="graficoPacientes"></canvas>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <script>
+            const ctx = document.getElementById('graficoPacientes');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: {{ datos_grafico.keys()|list|tojson }},
+                    datasets: [{
+                        label: 'Número de citas',
+                        data: {{ datos_grafico.values()|list|tojson }},
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgb(54, 162, 235)',
+                        borderWidth: 2,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        </script>
+        {% endif %}
+
+        <!-- TABLA -->
+        {% if citas %}
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-dark mb-3">
+                        <i class="las la-list me-2"></i> Detalle de citas
+                    </h5>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Paciente</th>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>Motivo</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for c in citas %}
+                                <tr>
+                                    <td>{{ c.paciente.nombre }} {{ c.paciente.apellido }}</td>
+                                    <td>{{ c.fecha }}</td>
+                                    <td>{{ c.hora }}</td>
+                                    <td>{{ c.motivo }}</td>
+                                    <td>{{ c.estado }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        {% else %}
+            <p class="text-muted">No hay pacientes registrados para este médico.</p>
+        {% endif %}
+    {% endif %}
+
+</div>
+
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %}
+</div>
+
+{% endblock %}

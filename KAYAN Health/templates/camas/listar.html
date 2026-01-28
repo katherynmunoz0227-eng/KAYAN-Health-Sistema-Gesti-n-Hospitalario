@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Camas - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-procedures me-2"></i>
+        Camas de la Habitación {{ habitacion.numero }}
+    </h2>
+
+    {% if current_user.role.nombre in ['Admin', 'Recepcion'] %}
+    <a href="{{ url_for('camas_bp.crear', habitacion_id=habitacion.id) }}" class="btn btn-primary">
+        <i class="las la-plus me-1"></i> Nueva Cama
+    </a>
+    {% endif %}
+</div>
+
+<div class="card shadow-sm p-3">
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Código</th>
+                    <th>Estado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for c in camas %}
+                <tr>
+                    <td>{{ c.codigo }}</td>
+
+                    <!-- Estado con badges -->
+                    <td>
+                        {% if c.estado == 'Libre' %}
+                            <span class="badge bg-success">Libre</span>
+                        {% elif c.estado == 'Ocupada' %}
+                            <span class="badge bg-danger">Ocupada</span>
+                        {% elif c.estado == 'Limpieza' %}
+                            <span class="badge bg-warning text-dark">Limpieza</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ c.estado }}</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Acciones -->
+                    <td class="text-center">
+
+                        {% if current_user.role.nombre in ['Admin', 'Recepcion'] %}
+
+                        <div class="d-flex justify-content-center align-items-center gap-2">
+
+                            <!-- Cambiar estado -->
+                            <form method="POST"
+                                  action="{{ url_for('camas_bp.cambiar_estado', id=c.id) }}"
+                                  class="d-flex align-items-center gap-2">
+
+                                <select name="estado" class="form-select form-select-sm" style="width: 150px;">
+                                    <option value="Libre" {% if c.estado == 'Libre' %}selected{% endif %}>Libre</option>
+                                    <option value="Ocupada" {% if c.estado == 'Ocupada' %}selected{% endif %}>Ocupada</option>
+                                    <option value="Limpieza" {% if c.estado == 'Limpieza' %}selected{% endif %}>Limpieza</option>
+                                    <option value="Mantenimiento" {% if c.estado == 'Mantenimiento' %}selected{% endif %}>Mantenimiento</option>
+                                </select>
+
+                                <button class="btn btn-sm btn-outline-primary" type="submit">
+                                    <i class="las la-sync"></i>
+                                </button>
+
+                            </form>
+
+                            <!-- Eliminar -->
+                            <form action="{{ url_for('camas_bp.eliminar_cama', id=c.id) }}"
+                                  method="POST"
+                                  class="d-inline">
+                                <button class="btn btn-danger btn-sm"
+                                        onclick="return confirm('¿Eliminar cama?')">
+                                    <i class="las la-trash"></i>
+                                </button>
+                            </form>
+
+                        </div>
+
+                        {% else %}
+                            <span class="text-muted">Solo lectura</span>
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+<a href="{{ url_for('habitaciones_bp.listar') }}" class="btn btn-secondary mt-3">
+    <i class="las la-arrow-left me-1"></i> Volver
+</a>
+
+{% endblock %}

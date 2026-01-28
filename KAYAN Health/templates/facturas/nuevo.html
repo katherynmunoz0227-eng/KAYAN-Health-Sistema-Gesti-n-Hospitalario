@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar Factura - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-file-invoice-dollar me-2"></i>
+        Registrar Factura
+    </h2>
+</div>
+
+<div class="card shadow-sm p-4">
+
+    <form method="POST">
+
+        <div class="row g-3">
+
+            <!-- PACIENTE -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Paciente</label>
+                <select name="pacientes_id" class="form-select" required>
+                    <option value="">Seleccione un paciente</option>
+                    {% for p in pacientes %}
+                        <option value="{{ p.id }}">{{ p.nombre }} {{ p.apellido }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- MÉTODO DE PAGO -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Método de Pago</label>
+                <select name="metodo_pago" class="form-select" required>
+                    <option value="">Seleccione</option>
+                    <option>Efectivo</option>
+                    <option>Tarjeta</option>
+                    <option>Transferencia</option>
+                </select>
+            </div>
+
+        </div>
+
+        <hr class="my-4">
+
+        <h4 class="fw-bold mb-3">
+            <i class="las la-list me-2"></i> Detalles de la Factura
+        </h4>
+
+        <div id="lineas-container">
+
+            <!-- FILA BASE -->
+            <div class="row g-3 linea-factura">
+
+                <!-- Servicio -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Servicio</label>
+                    <select name="servicio_id" class="form-select servicio-select">
+                        <option value="">-- Manual --</option>
+                        {% for s in servicios %}
+                            <option value="{{ s.id }}" data-precio="{{ s.precio }}">
+                                {{ s.nombre }} ({{ "%.2f"|format(s.precio) }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Descripción -->
+                <div class="col-md-5">
+                    <label class="form-label fw-semibold">Descripción</label>
+                    <input type="text" name="descripcion" class="form-control descripcion-input"
+                           placeholder="Descripción del servicio">
+                </div>
+
+                <!-- Precio -->
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold">Precio</label>
+                    <input type="number" step="0.01" name="precio" class="form-control precio-input" required>
+                </div>
+
+                <!-- Eliminar línea -->
+                <div class="col-md-1 d-flex align-items-end">
+                    <button type="button" class="btn btn-outline-danger remove-line w-100">
+                        <i class="las la-trash"></i>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Agregar línea -->
+        <button type="button" class="btn btn-secondary mt-3" id="add-line">
+            <i class="las la-plus me-1"></i> Agregar Servicio
+        </button>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="las la-save me-1"></i> Guardar Factura
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+<!-- SCRIPT PARA CARGAR CAMAS LIBRES -->
+<script>
+// DUPLICAR FILAS
+document.getElementById('add-line').addEventListener('click', function () {
+    const container = document.getElementById('lineas-container');
+    const firstLine = container.querySelector('.linea-factura');
+    const newLine = firstLine.cloneNode(true);
+
+    newLine.querySelectorAll('input').forEach(i => i.value = "");
+    newLine.querySelector('.servicio-select').value = "";
+
+    container.appendChild(newLine);
+});
+
+// ELIMINAR FILA
+document.addEventListener('click', function (e) {
+    if (e.target.closest('.remove-line')) {
+        const line = e.target.closest('.linea-factura');
+        const container = document.getElementById('lineas-container');
+
+        if (container.children.length > 1) {
+            line.remove();
+        }
+    }
+});
+
+// AUTO-LLENAR PRECIO SEGÚN SERVICIO
+document.addEventListener('change', function (e) {
+    if (e.target.classList.contains('servicio-select')) {
+        const precio = e.target.selectedOptions[0].dataset.precio;
+        const precioInput = e.target.closest('.linea-factura').querySelector('.precio-input');
+
+        if (precio) {
+            precioInput.value = precio;
+        }
+    }
+});
+</script>
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+</div>
+{% endblock %}

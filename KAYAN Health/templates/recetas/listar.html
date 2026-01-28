@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Listado de Recetas Médicas{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-prescription me-2"></i>
+        Listado de Recetas Médicas
+    </h2>
+
+    <a href="{{ url_for('recetas_bp.crear') }}" class="btn btn-primary">
+        <i class="las la-plus me-1"></i> Nueva Receta
+    </a>
+</div>
+
+<div class="card shadow-sm p-3">
+
+    {% if recetas %}
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Paciente</th>
+                    <th>Médico</th>
+                    <th>Diagnóstico</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for receta, paciente, medico in recetas %}
+                <tr>
+                    <td>{{ receta.id }}</td>
+                    <td>{{ receta.fecha.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>{{ paciente.nombre }} {{ paciente.apellido }}</td>
+                    <td>{{ medico.nombre }} {{ medico.apellido }}</td>
+                    <td>{{ receta.diagnostico or '—' }}</td>
+
+                    <td class="text-center">
+
+                        <!-- Ver -->
+                        <a href="{{ url_for('recetas_bp.ver', id=receta.id) }}"
+                           class="btn btn-sm btn-outline-secondary">
+                            <i class="las la-eye"></i>
+                        </a>
+
+                        <!-- Eliminar -->
+                        <td class="text-center">
+                            <form action="{{ url_for('recetas_bp.eliminar_receta', id=receta.id) }}"
+                                method="POST" class="d-inline">
+                                <button class="btn btn-danger btn-sm"
+                                        onclick="return confirm('¿Eliminar receta?')">
+                                    <i class="las la-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+
+
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+    {% else %}
+        <p class="text-center text-muted my-3">No hay recetas registradas.</p>
+    {% endif %}
+
+</div>
+
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+</div>
+{% endblock %}

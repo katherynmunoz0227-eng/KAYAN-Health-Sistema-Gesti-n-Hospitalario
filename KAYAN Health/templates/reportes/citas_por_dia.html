@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Citas por Día{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-calendar-day me-2"></i> Citas por Día
+    </h2>
+
+    <a href="{{ url_for('reportes_bp.reportes_menu') }}" class="btn btn-secondary">
+        <i class="las la-arrow-left me-1"></i> Volver
+    </a>
+</div>
+
+<!-- Tarjeta del formulario -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="card-title text-primary">
+            <i class="las la-search me-2"></i> Seleccionar fecha
+        </h5>
+
+        <form method="POST" class="row g-3 mt-2">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Fecha</label>
+                <input type="date" name="fecha" class="form-control" required>
+            </div>
+
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="las la-filter me-1"></i> Consultar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if fecha %}
+<!-- Tarjeta del total -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="card-title text-success">
+            <i class="las la-check-circle me-2"></i> Resultados del {{ fecha }}
+        </h5>
+
+        <p class="fs-4 fw-bold">
+            Total de citas: {{ total_citas }}
+        </p>
+    </div>
+</div>
+{% endif %}
+
+{% if citas %}
+<!-- Tabla de citas -->
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h5 class="card-title text-dark mb-3">
+            <i class="las la-list me-2"></i> Detalle de citas
+        </h5>
+
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Hora</th>
+                        <th>Paciente</th>
+                        <th>Médico</th>
+                        <th>Motivo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in citas %}
+                    <tr>
+                        <td>{{ c.hora.strftime("%H:%M") }}</td>
+                        <td>{{ c.paciente.nombre }} {{ c.paciente.apellido }}</td>
+                        <td>{{ c.medico.nombre }} {{ c.medico.apellido }}</td>
+                        <td>{{ c.motivo }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+{% endif %}
+<div class="d-flex justify-content-end mt-3">
+{% include "components/botones_nav.html" %} 
+</div>
+{% endblock %}

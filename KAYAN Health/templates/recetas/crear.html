@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar Receta - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-prescription me-2"></i>
+        Registrar Receta Médica
+    </h2>
+</div>
+
+<div class="card shadow-sm p-4">
+
+    <form method="POST">
+
+        <div class="row g-3">
+
+            <!-- PACIENTE -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    <i class="las la-user-injured me-1"></i> Paciente
+                </label>
+                <select name="pacientes_id" class="form-select" required>
+                    <option value="">Seleccione un paciente</option>
+                    {% for p in pacientes %}
+                        <option value="{{ p.id }}">{{ p.nombre }} {{ p.apellido }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- MÉDICO -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    <i class="las la-user-md me-1"></i> Médico
+                </label>
+                <select name="medicos_id" class="form-select" required>
+                    <option value="">Seleccione un médico</option>
+                    {% for m in medicos %}
+                        <option value="{{ m.id }}">{{ m.nombre }} {{ m.apellido }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- DIAGNÓSTICO -->
+            <div class="col-md-12">
+                <label class="form-label fw-semibold">
+                    <i class="las la-notes-medical me-1"></i> Diagnóstico
+                </label>
+                <input type="text" name="diagnostico" class="form-control"
+                       placeholder="Escriba el diagnóstico..." required>
+            </div>
+
+            <!-- INDICACIONES -->
+            <div class="col-md-12">
+                <label class="form-label fw-semibold">
+                    <i class="las la-file-medical-alt me-1"></i> Indicaciones Generales
+                </label>
+                <textarea name="indicaciones" class="form-control" rows="4"
+                          placeholder="Indicaciones para el paciente..."></textarea>
+            </div>
+
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="las la-save me-1"></i> Guardar Receta
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+</div>
+{% endblock %}

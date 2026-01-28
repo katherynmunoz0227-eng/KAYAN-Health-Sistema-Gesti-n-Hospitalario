@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Nueva Cama - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-procedures me-2"></i>
+        Nueva Cama en Habitación {{ habitacion.numero }}
+    </h2>
+</div>
+
+<div class="card shadow-sm p-4">
+
+    <form method="POST">
+
+        <div class="row g-3">
+
+            <!-- Código de cama -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Código de Cama</label>
+                <input type="text" name="codigo" class="form-control" required>
+            </div>
+
+            <!-- Estado -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Estado</label>
+                <select name="estado" class="form-select">
+                    <option value="Libre">Libre</option>
+                    <option value="Ocupada">Ocupada</option>
+                    <option value="Limpieza">Limpieza</option>
+                    <option value="Mantenimiento">Mantenimiento</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="las la-save me-1"></i> Guardar
+            </button>
+        </div>
+
+    </form>
+
+</div>
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+</div>
+{% endblock %}

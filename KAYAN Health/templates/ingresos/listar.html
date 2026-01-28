@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Ingresos - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-procedures me-2"></i>
+        Ingresos Hospitalarios
+    </h2>
+
+    {% if current_user.role.nombre in ['Admin', 'Recepcion'] %}
+    <a href="{{ url_for('ingresos_bp.crear') }}" class="btn btn-primary">
+        <i class="las la-plus me-1"></i> Nuevo Ingreso
+    </a>
+    {% endif %}
+</div>
+
+<div class="card shadow-sm p-3">
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Paciente</th>
+                    <th>Médico</th>
+                    <th>Habitación</th>
+                    <th>Cama</th>
+                    <th>Ingreso</th>
+                    <th>Alta</th>
+                    <th>Estado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for i in ingresos %}
+                <tr>
+                    <td>{{ i.paciente.nombre }} {{ i.paciente.apellido }}</td>
+                    <td>{{ i.medico.nombre }} {{ i.medico.apellido }}</td>
+                    <td>{{ i.cama.habitacion.numero }}</td>
+                    <td>{{ i.cama.codigo }}</td>
+                    <td>{{ i.fecha_ingreso.strftime('%Y-%m-%d') }}</td>
+
+                    <td>
+                        {% if i.fecha_alta %}
+                            {{ i.fecha_alta.strftime('%Y-%m-%d') }}
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if i.estado == 'Activo' %}
+                            <span class="badge bg-success">Activo</span>
+                        {% elif i.estado == 'Alta' %}
+                            <span class="badge bg-primary">Alta</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ i.estado }}</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="text-center">
+
+                        <!-- Ver detalle -->
+                        <a href="{{ url_for('ingresos_bp.detalle', id=i.id) }}"
+                           class="btn btn-sm btn-outline-secondary me-1">
+                            <i class="las la-eye"></i>
+                        </a>
+
+                        <!-- Dar alta -->
+                        {% if current_user.role.nombre in ['Admin', 'Recepcion'] and i.estado == 'Activo' %}
+                        <form method="POST"
+                              action="{{ url_for('ingresos_bp.alta', id=i.id) }}"
+                              class="d-inline">
+                            <button class="btn btn-sm btn-outline-danger">
+                                <i class="las la-sign-out-alt"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+
+                        {% if current_user.role.nombre in ['Admin', 'Recepcion'] %}
+                        <form method="POST"
+                            action="{{ url_for('ingresos_bp.eliminar', id=i.id) }}"
+                            class="d-inline">
+                            <button class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('¿Eliminar ingreso?')">
+                                <i class="las la-trash"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+</div>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle del Ingreso - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-procedures me-2"></i>
+        Detalle del Ingreso
+    </h2>
+</div>
+
+<div class="card shadow-sm p-4">
+
+    <div class="row g-3">
+
+        <!-- Paciente -->
+        <div class="col-md-6">
+            <label class="fw-semibold text-secondary">Paciente</label>
+            <div class="border rounded p-2 bg-light">
+                {{ ingreso.paciente.nombre }} {{ ingreso.paciente.apellido }}
+            </div>
+        </div>
+
+        <!-- Médico -->
+        <div class="col-md-6">
+            <label class="fw-semibold text-secondary">Médico Responsable</label>
+            <div class="border rounded p-2 bg-light">
+                {{ ingreso.medico.nombre }} {{ ingreso.medico.apellido }}
+            </div>
+        </div>
+
+        <!-- Habitación -->
+        <div class="col-md-6">
+            <label class="fw-semibold text-secondary">Habitación</label>
+            <div class="border rounded p-2">
+                {{ ingreso.cama.habitacion.numero }}
+            </div>
+        </div>
+
+        <!-- Cama -->
+        <div class="col-md-6">
+            <label class="fw-semibold text-secondary">Cama</label>
+            <div class="border rounded p-2">
+                {{ ingreso.cama.codigo }}
+            </div>
+        </div>
+
+        <!-- Fecha de ingreso -->
+        <div class="col-md-6">
+            <label class="fw-semibold text-secondary">Fecha de Ingreso</label>
+            <div class="border rounded p-2">
+                {{ ingreso.fecha_ingreso.strftime('%Y-%m-%d') }}
+            </div>
+        </div>
+
+        <!-- Fecha de alta -->
+        <div class="col-md-6">
+            <label class="fw-semibold text-secondary">Fecha de Alta</label>
+            <div class="border rounded p-2">
+                {% if ingreso.fecha_alta %}
+                    {{ ingreso.fecha_alta.strftime('%Y-%m-%d') }}
+                {% else %}
+                    <span class="badge bg-warning text-dark">Aún ingresado</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Motivo -->
+        <div class="col-md-12">
+            <label class="fw-semibold text-secondary">Motivo del Ingreso</label>
+            <div class="border rounded p-2">
+                {{ ingreso.motivo }}
+            </div>
+        </div>
+
+        <!-- Estado -->
+        <div class="col-md-12">
+            <label class="fw-semibold text-secondary">Estado</label>
+            <div class="border rounded p-2">
+                {% if ingreso.estado == 'Alta' %}
+                    <span class="badge bg-primary">Alta</span>
+                {% else %}
+                    <span class="badge bg-success">Ingresado</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Botón de Alta -->
+        {% if current_user.role.nombre in ['Admin', 'Recepcion'] and not ingreso.fecha_alta %}
+        <div class="col-md-12 mt-3">
+            <form action="{{ url_for('ingresos_bp.alta', id=ingreso.id) }}" method="POST">
+                <button type="submit" class="btn btn-danger px-4">
+                    <i class="las la-sign-out-alt me-1"></i> Registrar Alta
+                </button>
+            </form>
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+</div>
+{% endblock %}

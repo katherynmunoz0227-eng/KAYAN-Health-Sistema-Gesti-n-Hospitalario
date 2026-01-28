@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Nueva Cita{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-calendar-plus me-2"></i> Nueva Cita
+    </h2>
+
+    <a href="{{ url_for('citas_bp.listar_citas') }}" class="btn btn-secondary">
+        <i class="las la-arrow-left me-1"></i> Volver
+    </a>
+</div>
+
+<div class="card shadow-sm p-4">
+
+    <p class="mb-3">
+        <strong>Paciente:</strong>
+        {{ paciente.nombre }} {{ paciente.apellido }}
+    </p>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.paciente_id }}
+
+        <div class="row g-3">
+
+            <!-- ESPECIALIDAD -->
+            <div class="col-md-6">
+                {{ form.especialidad_id.label(class="form-label fw-semibold") }}
+                {{ form.especialidad_id(class="form-select", onchange="this.form.submit()") }}
+            </div>
+
+            <!-- MÉDICO -->
+            <div class="col-md-6">
+                {{ form.medicos_id.label(class="form-label fw-semibold") }}
+                {{ form.medicos_id(class="form-select", onchange="this.form.submit()") }}
+            </div>
+
+            <!-- FECHA -->
+            <div class="col-md-6">
+                {{ form.fecha.label(class="form-label fw-semibold") }}
+                {{ form.fecha(class="form-control", onchange="this.form.submit()") }}
+            </div>
+
+            <!-- HORAS -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Hora</label>
+                <select name="hora" class="form-select" required>
+                    <option value="">Seleccione una hora</option>
+
+                    {% for h in horas_posibles %}
+                        {% set ocupado = h in horas_ocupadas %}
+                        <option value="{{ h }}"
+                                {% if ocupado %}disabled class="text-danger"{% endif %}
+                                {% if form.hora.data == h %}selected{% endif %}>
+                            {{ h }} {% if ocupado %}(Ocupada){% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- MOTIVO -->
+            <div class="col-12">
+                {{ form.motivo.label(class="form-label fw-semibold") }}
+                {{ form.motivo(class="form-control", rows="3") }}
+            </div>
+
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+                <i class="las la-save me-1"></i> Guardar Cita
+            </button>
+
+            <a href="{{ url_for('citas_bp.listar_citas') }}" class="btn btn-secondary">
+                Cancelar
+            </a>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

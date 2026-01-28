@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Usuario - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-user-edit me-2"></i>
+        Editar Usuario
+    </h2>
+</div>
+
+<div class="card shadow-sm p-4">
+
+    <form method="POST">
+
+        <div class="row g-3">
+
+            <!-- Usuario -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Usuario</label>
+                <input type="text" name="username" class="form-control"
+                       value="{{ usuario.username }}" required>
+            </div>
+
+            <!-- Nombre -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Nombre</label>
+                <input type="text" name="nombre" class="form-control"
+                       value="{{ usuario.nombre }}" required>
+            </div>
+
+            <!-- Apellido -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Apellido</label>
+                <input type="text" name="apellido" class="form-control"
+                       value="{{ usuario.apellido }}" required>
+            </div>
+
+            <!-- Nueva contraseña -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Nueva Contraseña (opcional)</label>
+                <input type="password" name="password" class="form-control">
+            </div>
+
+            <!-- Rol -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Rol</label>
+                <select name="rol" class="form-select" required>
+                    {% for r in roles %}
+                    <option value="{{ r.id }}"
+                        {% if usuario.roles_id == r.id %}selected{% endif %}>
+                        {{ r.nombre }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+        </div>
+
+        <div class="mt-4">
+            <button class="btn btn-primary px-4">
+                <i class="las la-save me-1"></i> Actualizar Usuario
+            </button>
+        </div>
+
+    </form>
+
+</div>
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+</div>
+{% endblock %}

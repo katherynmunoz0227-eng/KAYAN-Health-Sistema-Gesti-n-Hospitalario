@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de Especialidad - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-clipboard-check me-2"></i>
+        Detalle de Especialidad
+    </h2>
+</div>
+
+<div class="card shadow-sm p-4">
+
+    <!-- Nombre -->
+    <div class="mb-3">
+        <label class="fw-semibold text-secondary">Nombre</label>
+        <div class="border rounded p-2 bg-light">
+            {{ especialidad.nombre_especialidad }}
+        </div>
+    </div>
+
+    <!-- Descripción -->
+    <div class="mb-3">
+        <label class="fw-semibold text-secondary">Descripción</label>
+        <div class="border rounded p-2">
+            {{ especialidad.descripcion }}
+        </div>
+    </div>
+
+</div>
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+</div>
+{% endblock %}

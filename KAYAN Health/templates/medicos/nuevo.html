@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar Médico - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-user-plus me-2"></i> Registrar Médico
+    </h2>
+</div>
+
+<div class="card shadow-sm p-4">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="row g-4">
+
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.nombre.label.text }}</label>
+                {{ form.nombre(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.apellido.label.text }}</label>
+                {{ form.apellido(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.telefono.label.text }}</label>
+                {{ form.telefono(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.email.label.text }}</label>
+                {{ form.email(class="form-control") }}
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label fw-semibold">{{ form.especialidad_id.label.text }}</label>
+                {{ form.especialidad_id(class="form-control") }}
+            </div>
+
+        </div>
+
+        <div class="mt-4">
+            <button class="btn btn-primary px-4">
+                <i class="las la-save me-1"></i> {{ form.submit.label.text }}
+            </button>
+        </div>
+
+    </form>
+    <div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+    </div>
+</div>
+
+{% endblock %}

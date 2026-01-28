@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle del Médico - KAYAN Health{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %} 
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">
+        <i class="las la-id-card me-2"></i> Detalle del Médico
+    </h2>
+</div>
+
+<!-- ============================
+     INFORMACIÓN GENERAL
+============================= -->
+<div class="card shadow-sm p-4 mb-4">
+
+    <h4 class="fw-bold mb-3">
+        <i class="las la-user-md me-2"></i> Información General
+    </h4>
+
+    <div class="row g-3">
+
+        <div class="col-md-6">
+            <label class="fw-semibold">Nombre:</label>
+            <div>{{ medico.nombre }}</div>
+        </div>
+
+        <div class="col-md-6">
+            <label class="fw-semibold">Apellido:</label>
+            <div>{{ medico.apellido }}</div>
+        </div>
+
+        <div class="col-md-6">
+            <label class="fw-semibold">Especialidad:</label>
+            <div>
+                {{ medico.especialidad.nombre_especialidad if medico.especialidad else 'Sin asignar' }}
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <label class="fw-semibold">Teléfono:</label>
+            <div>{{ medico.telefono }}</div>
+        </div>
+
+        <div class="col-md-12">
+            <label class="fw-semibold">Email:</label>
+            <div>{{ medico.email }}</div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ============================
+     HORARIOS
+============================= -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-bold">
+        <i class="las la-clock me-2"></i> Horarios
+    </h4>
+</div>
+
+{% if medico.horarios %}
+<div class="card shadow-sm p-4 mb-4">
+
+    <div class="row g-3">
+        {% for h in medico.horarios %}
+        <div class="col-md-4">
+            <div class="border rounded p-3 bg-light d-flex justify-content-between align-items-center">
+                <div>
+                    <p class="mb-1"><strong>{{ h.dia_semana }}</strong></p>
+                    <p class="mb-0">{{ h.hora_inicio }} – {{ h.hora_fin }}</p>
+                </div>
+
+                <a href="{{ url_for('horario_bp.editar', id=h.id) }}" class="btn btn-warning btn-sm">
+                    <i class="las la-edit"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% else %}
+<p class="text-muted">Este médico no tiene horarios registrados.</p>
+{% endif %}
+
+<a href="{{ url_for('horario_bp.nuevo_horario', medicos_id=medico.id) }}" class="btn btn-primary px-4">
+    <i class="las la-plus-circle me-1"></i> Agregar horario
+</a>
+
+{% endblock %}

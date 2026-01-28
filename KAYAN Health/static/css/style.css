@@ -1,0 +1,48 @@
+/* RESET BÁSICO */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ESTILOS BASE */
+body {
+    background: #f3f4f6;
+    font-family: "Segoe UI", sans-serif;
+}
+
+
+/*EL TAMAÑO DEL TEXTO EN EL CONTENIDO*/
+
+main {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #1f2937;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.card-text {
+    font-size: 14px;
+    color: #4b5563;
+}
+
+
+
+body {
+    font-size: 16px;
+    font-family: "Segoe UI", sans-serif;
+    color: #1f2937;
+}
+
+
+/*cama eliminar*/
+.cama-acciones {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
