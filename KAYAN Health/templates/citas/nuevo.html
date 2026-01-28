@@ -29,32 +29,33 @@
             <!-- ESPECIALIDAD -->
             <div class="col-md-6">
                 {{ form.especialidad_id.label(class="form-label fw-semibold") }}
-                {{ form.especialidad_id(class="form-select", onchange="this.form.submit()") }}
+                {{ form.especialidad_id(class="form-select") }}
             </div>
 
             <!-- MÉDICO -->
             <div class="col-md-6">
                 {{ form.medicos_id.label(class="form-label fw-semibold") }}
-                {{ form.medicos_id(class="form-select", onchange="this.form.submit()") }}
+                {{ form.medicos_id(class="form-select") }}
             </div>
 
             <!-- FECHA -->
             <div class="col-md-6">
                 {{ form.fecha.label(class="form-label fw-semibold") }}
-                {{ form.fecha(class="form-control", onchange="this.form.submit()") }}
+                {{ form.fecha(class="form-control") }}
             </div>
 
             <!-- HORAS -->
             <div class="col-md-6">
-                <label class="form-label fw-semibold">Hora</label>
-                <select name="hora" class="form-select" required>
+                {{ form.hora.label(class="form-label fw-semibold") }}
+
+                    {{ form.hora(class="form-select") }}
                     <option value="">Seleccione una hora</option>
 
                     {% for h in horas_posibles %}
                         {% set ocupado = h in horas_ocupadas %}
                         <option value="{{ h }}"
-                                {% if ocupado %}disabled class="text-danger"{% endif %}
-                                {% if form.hora.data == h %}selected{% endif %}>
+                            {% if form.hora.data == h %}selected{% endif %}
+                            {% if ocupado %}disabled class="text-danger"{% endif %}>
                             {{ h }} {% if ocupado %}(Ocupada){% endif %}
                         </option>
                     {% endfor %}

@@ -1,11 +1,7 @@
 {% extends "base.html" %}
-{% block title %}Editar Cita - KAYAN Health{% endblock %}
+{% block title %}Editar Cita{% endblock %}
 
 {% block content %}
-
-<div class="d-flex justify-content-end mt-3">
-    {% include "components/botones_nav.html" %}
-</div>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold">
@@ -19,46 +15,82 @@
 
 <div class="card shadow-sm p-4">
 
-    <form method="POST">
+    <form method="POST" novalidate>
         {{ form.hidden_tag() }}
 
         <div class="row g-3">
 
+            <!-- PACIENTE (SOLO LECTURA) -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Paciente</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    value="{{ cita.paciente.nombre }} {{ cita.paciente.apellido }}"
+                    readonly
+                >
+            </div>
+
             <!-- MÉDICO -->
             <div class="col-md-6">
                 {{ form.medicos_id.label(class="form-label fw-semibold") }}
-                {{ form.medicos_id(class="form-select", onchange="this.form.submit()") }}
+                {{ form.medicos_id(class="form-select") }}
+                {% if form.medicos_id.errors %}
+                    <div class="text-danger small">
+                        {{ form.medicos_id.errors[0] }}
+                    </div>
+                {% endif %}
             </div>
 
             <!-- FECHA -->
             <div class="col-md-6">
                 {{ form.fecha.label(class="form-label fw-semibold") }}
-                {{ form.fecha(class="form-control", onchange="this.form.submit()") }}
+                {{ form.fecha(class="form-control") }}
+                {% if form.fecha.errors %}
+                    <div class="text-danger small">
+                        {{ form.fecha.errors[0] }}
+                    </div>
+                {% endif %}
             </div>
 
             <!-- HORA -->
             <div class="col-md-6">
                 {{ form.hora.label(class="form-label fw-semibold") }}
                 {{ form.hora(class="form-select") }}
+                {% if form.hora.errors %}
+                    <div class="text-danger small">
+                        {{ form.hora.errors[0] }}
+                    </div>
+                {% endif %}
             </div>
 
             <!-- MOTIVO -->
             <div class="col-12">
                 {{ form.motivo.label(class="form-label fw-semibold") }}
                 {{ form.motivo(class="form-control", rows="3") }}
+                {% if form.motivo.errors %}
+                    <div class="text-danger small">
+                        {{ form.motivo.errors[0] }}
+                    </div>
+                {% endif %}
             </div>
 
             <!-- ESTADO -->
             <div class="col-md-6">
                 {{ form.estado.label(class="form-label fw-semibold") }}
                 {{ form.estado(class="form-select") }}
+                {% if form.estado.errors %}
+                    <div class="text-danger small">
+                        {{ form.estado.errors[0] }}
+                    </div>
+                {% endif %}
             </div>
 
         </div>
 
         <div class="mt-4 d-flex gap-2">
-            <button type="submit" class="btn btn-primary">
-                <i class="las la-save me-1"></i> Guardar Cambios
+            <button type="submit" class="btn btn-warning">
+                <i class="las la-save me-1"></i> Actualizar Cita
             </button>
 
             <a href="{{ url_for('citas_bp.listar_citas') }}" class="btn btn-secondary">
@@ -67,7 +99,6 @@
         </div>
 
     </form>
-
 </div>
 
 {% endblock %}
