@@ -1,7 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Editar Cita{% endblock %}
+{% block title %}Editar Cita - KAYAN Health{% endblock %}
 
 {% block content %}
+
+<div class="d-flex justify-content-end mt-3">
+    {% include "components/botones_nav.html" %}
+</div>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold">
@@ -13,18 +17,6 @@
     </a>
 </div>
 
-<!-- Mensajes flash (éxito, error, etc.) -->
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
-
 <div class="card shadow-sm p-4">
 
     <form method="POST">
@@ -35,66 +27,31 @@
             <!-- MÉDICO -->
             <div class="col-md-6">
                 {{ form.medicos_id.label(class="form-label fw-semibold") }}
-                {{ form.medicos_id(class="form-select") }}
-                {% if form.medicos_id.errors %}
-                    <div class="invalid-feedback d-block">
-                        {% for error in form.medicos_id.errors %}
-                            <small class="text-danger">{{ error }}</small><br>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                {{ form.medicos_id(class="form-select", onchange="this.form.submit()") }}
             </div>
 
             <!-- FECHA -->
             <div class="col-md-6">
                 {{ form.fecha.label(class="form-label fw-semibold") }}
-                {{ form.fecha(class="form-control") }}
-                {% if form.fecha.errors %}
-                    <div class="invalid-feedback d-block">
-                        {% for error in form.fecha.errors %}
-                            <small class="text-danger">{{ error }}</small><br>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                {{ form.fecha(class="form-control", onchange="this.form.submit()") }}
             </div>
 
             <!-- HORA -->
             <div class="col-md-6">
                 {{ form.hora.label(class="form-label fw-semibold") }}
                 {{ form.hora(class="form-select") }}
-                {% if form.hora.errors %}
-                    <div class="invalid-feedback d-block">
-                        {% for error in form.hora.errors %}
-                            <small class="text-danger">{{ error }}</small><br>
-                        {% endfor %}
-                    </div>
-                {% endif %}
             </div>
 
             <!-- MOTIVO -->
             <div class="col-12">
                 {{ form.motivo.label(class="form-label fw-semibold") }}
                 {{ form.motivo(class="form-control", rows="3") }}
-                {% if form.motivo.errors %}
-                    <div class="invalid-feedback d-block">
-                        {% for error in form.motivo.errors %}
-                            <small class="text-danger">{{ error }}</small><br>
-                        {% endfor %}
-                    </div>
-                {% endif %}
             </div>
 
             <!-- ESTADO -->
             <div class="col-md-6">
                 {{ form.estado.label(class="form-label fw-semibold") }}
                 {{ form.estado(class="form-select") }}
-                {% if form.estado.errors %}
-                    <div class="invalid-feedback d-block">
-                        {% for error in form.estado.errors %}
-                            <small class="text-danger">{{ error }}</small><br>
-                        {% endfor %}
-                    </div>
-                {% endif %}
             </div>
 
         </div>
@@ -111,10 +68,6 @@
 
     </form>
 
-</div>
-
-<div class="d-flex justify-content-end mt-3">
-    {% include "components/botones_nav.html" %} 
 </div>
 
 {% endblock %}

@@ -36,9 +36,9 @@ class CitaForm(FlaskForm):
     
     submit = SubmitField('Guardar Cita')
 
-# -------------------------
+# -----------------------
 #   CREAR CITA
-# -------------------------
+# -----------------------
 @citas_bp.route('/citas/nueva/<int:paciente_id>', methods=['GET', 'POST'])
 def nueva_cita(paciente_id):
     paciente = Pacientes.query.get_or_404(paciente_id)
